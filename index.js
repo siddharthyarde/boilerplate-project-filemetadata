@@ -7,14 +7,15 @@ var app = express();
 var upload = multer({ storage: multer.memoryStorage() });
 
 app.use(cors());
-app.use('/public', express.static(process.cwd() + '/public'));
+app.use('/public', express.static(__dirname + '/public'));
 
 app.get('/', function (req, res) {
-  res.sendFile(process.cwd() + '/views/index.html');
+  res.sendFile(__dirname + '/views/index.html');
 });
 
 app.post('/api/fileanalyse', upload.single('upfile'), function (req, res) {
   var file = req.file;
+  console.log('upfile:', file ? `name=${file.originalname} type=${file.mimetype} size=${file.size}` : 'undefined');
   if (!file) {
     return res.status(400).json({ error: 'No file uploaded' });
   }
